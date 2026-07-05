@@ -1,0 +1,12 @@
+{
+  "appId": "com.ozan.isikodasi",
+  "appName": "Işık Odası",
+  "webDir": "www",
+  "backgroundColor": "#0d1120",
+  "android": {
+    "allowMixedContent": false
+  },
+  "server": {
+    "androidScheme": "https"
+  }
+}
