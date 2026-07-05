@@ -158,50 +158,106 @@ const CRYSTAL_COLORS = { any:'#3fd4c4', red:'#ff6b6b', blue:'#6bb3ff' };
    o = '/' | '\\'   c = renk   mv = taşınabilir
    sol = çözüm ('/' , '\\' veya {x,y,o})           */
 const LEVELS = [
-  { name:'İlk Işık', par:1, emitter:{x:0,y:3,dir:'R'},
+  { name:'İlk Işık', par:1, tip:'Aynalara dokun: yönü değişir.',
+    emitter:{x:0,y:3,dir:'R'},
     crystals:[{x:4,y:0,c:'any'}], walls:[],
     pieces:[ {k:'m',x:4,y:3,o:'\\',sol:'/'} ] },
 
-  { name:'Çift Sekme', par:2, emitter:{x:0,y:5,dir:'R'},
+  { name:'Çift Sekme', par:2, tip:'Işık birden çok aynadan sekebilir.',
+    emitter:{x:0,y:5,dir:'R'},
     crystals:[{x:6,y:1,c:'any'}], walls:[],
     pieces:[ {k:'m',x:2,y:5,o:'\\',sol:'/'}, {k:'m',x:2,y:1,o:'\\',sol:'/'} ] },
 
-  { name:'Duvarın Ardı', par:3, emitter:{x:0,y:1,dir:'R'},
+  { name:'Duvarın Ardı', par:3, tip:'Duvarlar ışığı yutar — etraflarından dolaş.',
+    emitter:{x:0,y:1,dir:'R'},
     crystals:[{x:5,y:0,c:'any'}], walls:[[4,1],[3,3]],
     pieces:[ {k:'m',x:2,y:1,o:'/',sol:'\\'}, {k:'m',x:2,y:5,o:'/',sol:'\\'}, {k:'m',x:5,y:5,o:'\\',sol:'/'} ] },
 
-  { name:'Dolambaç', par:4, emitter:{x:3,y:6,dir:'U'},
+  { name:'Dolambaç', par:4, tip:'Her ayna gerekli olmayabilir…',
+    emitter:{x:3,y:6,dir:'U'},
     crystals:[{x:5,y:1,c:'any'}], walls:[[4,4],[6,0]],
     pieces:[ {k:'m',x:3,y:2,o:'/',sol:'\\'}, {k:'m',x:1,y:2,o:'\\',sol:'/'},
              {k:'m',x:1,y:5,o:'/',sol:'\\'}, {k:'m',x:5,y:5,o:'\\',sol:'/'},
              {k:'m',x:6,y:3,o:'/',sol:null}, {k:'m',x:2,y:0,o:'\\',sol:null} ] },
 
-  { name:'Sarmal', par:3, emitter:{x:0,y:0,dir:'R'},
+  { name:'Sarmal', par:3, tip:'Bazı aynalar zaten doğru duruyor olabilir.',
+    emitter:{x:0,y:0,dir:'R'},
     crystals:[{x:1,y:5,c:'any'}], walls:[[4,0],[3,2],[6,4]],
     pieces:[ {k:'m',x:2,y:0,o:'/',sol:'\\'}, {k:'m',x:2,y:3,o:'\\',sol:'\\'},
              {k:'m',x:5,y:3,o:'/',sol:'\\'}, {k:'m',x:5,y:5,o:'\\',sol:'/'} ] },
 
-  { name:'Ustalık', par:4, emitter:{x:6,y:3,dir:'L'},
+  { name:'Ustalık', par:4, tip:'Uzun zincir: sondan başa doğru düşün.',
+    emitter:{x:6,y:3,dir:'L'},
     crystals:[{x:6,y:1,c:'any'}], walls:[[4,5],[2,2]],
     pieces:[ {k:'m',x:3,y:3,o:'\\',sol:'/'}, {k:'m',x:3,y:6,o:'\\',sol:'/'},
              {k:'m',x:0,y:6,o:'/',sol:'\\'}, {k:'m',x:0,y:1,o:'\\',sol:'/'},
              {k:'m',x:5,y:4,o:'/',sol:null}, {k:'m',x:1,y:3,o:'\\',sol:null} ] },
 
-  { name:'Bölünen Işık', par:1, emitter:{x:0,y:3,dir:'R'},
+  { name:'Bölünen Işık', par:1, tip:'Bölücü camlar ışığı ikiye ayırır: biri geçer, biri yansır.',
+    emitter:{x:0,y:3,dir:'R'},
     crystals:[{x:6,y:3,c:'any'},{x:3,y:0,c:'any'}], walls:[],
     pieces:[ {k:'s',x:3,y:3,o:'\\',sol:'/'} ] },
 
-  { name:'Renk Odası', par:2, emitter:{x:0,y:3,dir:'R'},
+  { name:'Renk Odası', par:2, tip:'Filtreler ışığı boyar — kristalin rengiyle eşleşmeli.',
+    emitter:{x:0,y:3,dir:'R'},
     crystals:[{x:6,y:3,c:'red'},{x:6,y:6,c:'blue'}], walls:[],
     pieces:[ {k:'s',x:2,y:3,o:'/',sol:'\\'},
              {k:'f',x:4,y:3,c:'red'}, {k:'f',x:2,y:5,c:'blue'},
              {k:'m',x:2,y:6,o:'/',sol:'\\'} ] },
 
-  { name:'Büyük Final', par:4, emitter:{x:0,y:0,dir:'R'},
+  { name:'Büyük Final', par:4, tip:'Noktalı çerçeveli ayna taşınabilir: sürükle. Dokununca döner.',
+    emitter:{x:0,y:0,dir:'R'},
     crystals:[{x:0,y:4,c:'any'},{x:6,y:2,c:'any'}], walls:[[2,6],[6,0]],
     pieces:[ {k:'m',x:5,y:5,o:'/',mv:1,sol:{x:4,y:0,o:'\\'}},
              {k:'s',x:4,y:2,o:'/',sol:'\\'},
-             {k:'m',x:4,y:4,o:'\\',sol:'/'} ] }
+             {k:'m',x:4,y:4,o:'\\',sol:'/'} ] },
+
+  { name:'Çelik Ayna', par:2, tip:'Gri çelik aynalar sabittir — planını onlara göre kur.',
+    emitter:{x:0,y:3,dir:'R'},
+    crystals:[{x:1,y:4,c:'any'}], walls:[[5,1],[4,5]],
+    pieces:[ {k:'m',x:3,y:3,o:'/',fx:1,sol:null},
+             {k:'m',x:3,y:0,o:'/',sol:'\\'}, {k:'m',x:1,y:0,o:'\\',sol:'/'} ] },
+
+  { name:'Portal', par:1, tip:'Portallar ışığı eş kapıya taşır — yön değişmez.',
+    emitter:{x:0,y:5,dir:'R'},
+    crystals:[{x:3,y:4,c:'any'}], walls:[],
+    pieces:[ {k:'p',x:3,y:5,id:0}, {k:'p',x:1,y:1,id:0},
+             {k:'m',x:3,y:1,o:'/',sol:'\\'} ] },
+
+  { name:'Kapıdan Geçiş', par:2, tip:'Bölünen ışığın bir kolu portaldan geçebilir.',
+    emitter:{x:0,y:3,dir:'R'},
+    crystals:[{x:6,y:6,c:'any'},{x:0,y:1,c:'any'}], walls:[],
+    pieces:[ {k:'s',x:2,y:3,o:'\\',sol:'/'},
+             {k:'m',x:2,y:1,o:'/',sol:'\\'},
+             {k:'p',x:4,y:3,id:0}, {k:'p',x:4,y:6,id:0} ] },
+
+  { name:'Renkli Kapılar', par:2, tip:'Renk, portaldan geçerken korunur.',
+    emitter:{x:0,y:2,dir:'R'},
+    crystals:[{x:3,y:0,c:'red'},{x:5,y:6,c:'blue'}], walls:[],
+    pieces:[ {k:'f',x:1,y:2,c:'red'},
+             {k:'s',x:2,y:2,o:'/',sol:'\\'},
+             {k:'m',x:3,y:2,o:'\\',sol:'/'},
+             {k:'f',x:2,y:4,c:'blue'},
+             {k:'p',x:2,y:5,id:0}, {k:'p',x:5,y:5,id:0} ] },
+
+  { name:'Taşı ve Geç', par:3, tip:'Taşınabilir aynayı ışığın yoluna sürükle.',
+    emitter:{x:6,y:0,dir:'L'},
+    crystals:[{x:3,y:6,c:'any'}], walls:[[0,6],[6,3]],
+    pieces:[ {k:'m',x:5,y:4,o:'\\',mv:1,sol:{x:2,y:0,o:'/'}},
+             {k:'m',x:2,y:2,o:'\\',fx:1,sol:null},
+             {k:'p',x:4,y:2,id:0}, {k:'p',x:1,y:4,id:0},
+             {k:'m',x:3,y:4,o:'/',sol:'\\'} ] },
+
+  { name:'Son Oda', par:3, tip:'Her şey bir arada: sondan başa doğru çöz.',
+    emitter:{x:0,y:6,dir:'R'},
+    crystals:[{x:6,y:1,c:'red'},{x:0,y:0,c:'blue'}], walls:[[4,1],[5,3]],
+    pieces:[ {k:'m',x:2,y:6,o:'\\',sol:'/'},
+             {k:'s',x:2,y:3,o:'/',sol:'\\'},
+             {k:'m',x:0,y:3,o:'/',sol:'\\'},
+             {k:'f',x:2,y:1,c:'red'}, {k:'f',x:0,y:1,c:'blue'},
+             {k:'p',x:2,y:0,id:0}, {k:'p',x:6,y:2,id:0},
+             {k:'m',x:4,y:4,o:'/',fx:1,sol:null},
+             {k:'m',x:5,y:5,o:'/',sol:null} ] }
 ];
 
 /* ============ durum ============ */
@@ -309,6 +365,15 @@ function traceBeams(){
         queue.push({x, y, dir:REFLECT[c.p.o][dir], color});
         continue;
       }
+      if(c.type==='p'){ // portal: eş kapıdan aynı yönde çık
+        pts.push([x*S+S/2, y*S+S/2]);
+        const partner = cur.pieces.find(q=>q.k==='p' && q.id===c.p.id && (q.x!==x||q.y!==y));
+        if(!partner) break; // eşi olmayan portal ışığı yutar
+        if(pts.length>1) segs.push({pts, color});
+        x = partner.x; y = partner.y;
+        pts = [[x*S+S/2, y*S+S/2]];
+        continue;
+      }
     }
     if(pts.length>1) segs.push({pts, color});
   }
@@ -360,6 +425,19 @@ function render(){
     </g>`;
   }
 
+  // portallar (eş kapılar)
+  const PORTAL_HUES = ['#b57bff','#7dff9e'];
+  for(const p of cur.pieces.filter(p=>p.k==='p')){
+    const cx = p.x*S+S/2, cy = p.y*S+S/2;
+    const col = PORTAL_HUES[p.id % PORTAL_HUES.length];
+    svg += `<g ${mode==='editor'?'':'pointer-events="none"'}>
+      <circle cx="${cx}" cy="${cy}" r="21" fill="${col}" opacity=".14"/>
+      <circle cx="${cx}" cy="${cy}" r="20" fill="none" stroke="${col}" stroke-width="3" opacity=".9"/>
+      <circle cx="${cx}" cy="${cy}" r="14" fill="none" stroke="${col}" stroke-width="1.6" stroke-dasharray="6 5" opacity=".8"/>
+      <circle cx="${cx}" cy="${cy}" r="7" fill="none" stroke="${col}" stroke-width="1.2" stroke-dasharray="3 4" opacity=".6"/>
+    </g>`;
+  }
+
   // kaynak
   if(cur.emitter){
     const e = cur.emitter, ang = {R:0,D:90,L:180,U:270}[e.dir];
@@ -385,14 +463,22 @@ function render(){
 
   // aynalar & bölücüler
   cur.pieces.forEach((p, idx)=>{
-    if(p.k==='f') return;
+    if(p.k==='f' || p.k==='p') return;
     const mx=p.x*S, my=p.y*S;
     const line = p.o==='/'
       ? `x1="${mx+14}" y1="${my+S-14}" x2="${mx+S-14}" y2="${my+14}"`
       : `x1="${mx+14}" y1="${my+14}" x2="${mx+S-14}" y2="${my+S-14}"`;
     const flash = hintFlash===idx
       ? `<rect class="hint-ring" x="${mx+3}" y="${my+3}" width="${S-6}" height="${S-6}" rx="12" fill="none" stroke="var(--amber)" stroke-width="3"/>` : '';
-    if(p.k==='m'){
+    if(p.k==='m' && p.fx){ // sabit çelik ayna
+      svg += `<g class="fixed-cell" ${mode==='editor'?'':'pointer-events="none"'} data-idx="${idx}">
+        <rect class="tile" x="${mx+5}" y="${my+5}" width="${S-10}" height="${S-10}" rx="10" fill="#232a3d" stroke="#4a556e" stroke-width="2"/>
+        <line ${line} stroke="#7f8aa3" stroke-width="7" stroke-linecap="round"/>
+        <line ${line} stroke="#d8dee9" stroke-width="1.6" stroke-linecap="round" opacity=".8"/>
+        <circle cx="${mx+12}" cy="${my+12}" r="2" fill="#4a556e"/><circle cx="${mx+S-12}" cy="${my+12}" r="2" fill="#4a556e"/>
+        <circle cx="${mx+12}" cy="${my+S-12}" r="2" fill="#4a556e"/><circle cx="${mx+S-12}" cy="${my+S-12}" r="2" fill="#4a556e"/>
+        ${flash}</g>`;
+    }else if(p.k==='m'){
       const border = p.mv ? `stroke-dasharray="5 4"` : '';
       svg += `<g class="mirror-cell ${p.mv?'movable':''}" data-idx="${idx}">
         <rect class="tile" x="${mx+5}" y="${my+5}" width="${S-10}" height="${S-10}" rx="10" fill="#1c2647" stroke="${p.mv?'var(--teal)':'var(--panel-edge)'}" stroke-width="1.5" ${border}/>
@@ -494,11 +580,7 @@ function loadLevel(i){
   renderDots(); render();
 }
 function hintDefaultText(){
-  $('hintText').textContent = levelIdx===8
-    ? 'Noktalı çerçeveli ayna taşınabilir: sürükle. Dokununca döner.'
-    : (levelIdx===7 ? 'Filtreler ışığı boyar — kristalin rengiyle eşleşmeli.'
-    : (levelIdx===6 ? 'Bölücü camlar ışığı ikiye ayırır: biri geçer, biri yansır.'
-    : 'Aynalara dokun: yönü değişir.'));
+  $('hintText').textContent = LEVELS[levelIdx].tip || 'Aynalara dokun: yönü değişir.';
 }
 function starsFor(m, par){ return m<=par ? 3 : m<=par+2 ? 2 : 1; }
 
@@ -561,8 +643,9 @@ $('hintBtn').addEventListener('click', ()=>{
 
 /* ============ editör ============ */
 const TOOLS = [
-  ['mirror','Ayna'],['mvmirror','Taşınır Ayna'],['splitter','Bölücü'],
+  ['mirror','Ayna'],['mvmirror','Taşınır Ayna'],['fixedm','Sabit Ayna'],['splitter','Bölücü'],
   ['fred','Filtre 🔴'],['fblue','Filtre 🔵'],
+  ['portalA','Portal 🟣'],['portalB','Portal 🟢'],
   ['wall','Duvar'],['emitter','Kaynak'],['crystal','Kristal'],['erase','Sil']
 ];
 function buildToolbar(){
@@ -614,9 +697,21 @@ function editorTap(ev){
   else if(edTool==='wall'){
     if(c.type!=='wall'){ rm(); edLevel.walls.push([x,y]); }
   }
-  else if(edTool==='mirror'||edTool==='mvmirror'){
+  else if(edTool==='mirror'||edTool==='mvmirror'||edTool==='fixedm'){
     if(c.type==='m'){ c.p.o = c.p.o==='/'?'\\':'/'; }
-    else { rm(); edLevel.pieces.push({k:'m',x,y,o:'/',mv:edTool==='mvmirror'?1:0,sol:null}); }
+    else { rm(); edLevel.pieces.push({k:'m',x,y,o:'/',mv:edTool==='mvmirror'?1:0,fx:edTool==='fixedm'?1:0,sol:null}); }
+  }
+  else if(edTool==='portalA'||edTool==='portalB'){
+    const pid = edTool==='portalA' ? 0 : 1;
+    if(c.type==='p'){ /* portala tekrar dokunmak bir şey değiştirmez */ }
+    else {
+      rm();
+      const same = edLevel.pieces.filter(q=>q.k==='p'&&q.id===pid);
+      if(same.length>=2){ // her renkten en fazla 2 kapı: en eskisi silinir
+        edLevel.pieces = edLevel.pieces.filter(q=>q!==same[0]);
+      }
+      edLevel.pieces.push({k:'p',x,y,id:pid});
+    }
   }
   else if(edTool==='splitter'){
     if(c.type==='s'){ c.p.o = c.p.o==='/'?'\\':'/'; }
