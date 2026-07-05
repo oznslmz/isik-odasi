@@ -1,4 +1,4 @@
-const CACHE = 'isik-odasi-v1';
+const CACHE = 'isik-odasi-v2';
 const ASSETS = [
   './',
   './index.html',
